@@ -30,7 +30,7 @@ void draw_tetrimino(tetrimino_t* tetrimino, color_t* color)
     rect.w = TETRIMINO_SIZE;
     rect.h = TETRIMINO_SIZE;
     tetrimino->offset %= TETRIMINO_MAX_ARRAY_ROT;
-    
+
     for (int i = tetrimino->offset * TETRIMINO_SEGMENT; i < (tetrimino->offset * TETRIMINO_SEGMENT) + TETRIMINO_SEGMENT; i++)
     {
         if (tetrimino->tetrimino_map[i] != 0)
@@ -38,14 +38,30 @@ void draw_tetrimino(tetrimino_t* tetrimino, color_t* color)
             rect.x = (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) % TETRIMINO_COLUMNS) * rect.w) + tetrimino->pos_x;
             rect.y = (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) / TETRIMINO_COLUMNS) * rect.h) + tetrimino->pos_y;
 
-            SDL_SetRenderDrawColor(context->renderer, 
+            SDL_SetRenderDrawColor(context->renderer,
             color[(int)tetrimino->tetrimino_map[i] - 1].r,
-            color[(int)tetrimino->tetrimino_map[i] - 1].g, 
-            color[(int)tetrimino->tetrimino_map[i] - 1].b, 
+            color[(int)tetrimino->tetrimino_map[i] - 1].g,
+            color[(int)tetrimino->tetrimino_map[i] - 1].b,
             color[(int)tetrimino->tetrimino_map[i] - 1].a);
-            SDL_RenderFillRect(context->renderer, &rect);
+            //SDL_RenderFillRect(context->renderer, &rect);
             SDL_RenderDrawRect(context->renderer, &rect);
         }
+    }
+}
+
+void destroyblocks(int line_num, char* map){
+    int start = (line_num - 1) * MAP_COLUMNS + 1;
+    for(int i = start; i <= start + MAP_COLUMNS - 1; i++){
+        int index = i;
+        int index_up = i - MAP_COLUMNS;
+        while(index_up > 0){
+            map[index] = map[index_up];
+            index = index_up;
+            index_up -= 15;
+        }
+        // if(map[i - MAP_COLUMNS] != 0 && map[i - MAP_COLUMNS] < 8){
+        //     map[i - MAP_COLUMNS] = 0;
+        // }
     }
 }
 
@@ -55,7 +71,7 @@ void check_map_line_filled(char* map)
     int number_of_tiles_completed = 0;
     for(int i = 0; i < TETRIMINO_TILEMAP_LENGTH; i++)
     {
-        if(map[i] > 0 && map[i] < 7)
+        if(map[i] > 0 && map[i] < 8)
         {
             number_of_tiles_completed++;
         }
@@ -63,7 +79,7 @@ void check_map_line_filled(char* map)
         if(number_of_tiles_completed == MAX_LINE)
         {
             number_of_tiles_completed = 0;
-            // destroy blocks
+            destroyblocks(line_num, map);
             // map[i % 15 * 8]
         }
 

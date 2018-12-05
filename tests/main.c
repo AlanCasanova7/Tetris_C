@@ -22,6 +22,8 @@ char** map_modes = NULL;
 
 #define MAX_STEP 20
 
+
+
 void respawn_tetrimino(){
     current_tetrimino->offset = rand() % 4;
     current_tetrimino->pos_x = context->width / 2 - 50;
