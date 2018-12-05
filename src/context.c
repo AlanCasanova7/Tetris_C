@@ -36,6 +36,22 @@ uint8_t get_key(sdl_context_t* ctx, SDL_Scancode key)
     return ctx->key_state[key];
 }
 
+/*uint8_t on_spacebar_down(sdl_context_t* ctx, SDL_Scancode key)
+{
+    if(get_key(ctx, key) && ctx->pressed == 0)
+    {
+        ctx->pressed = 1;
+        return ctx->key_state[key];
+    }
+    else if (!get_key(ctx, key))
+    {
+        ctx->pressed = 0;
+        return 0;
+    }
+
+    return 0;
+}*/
+
 void sdl_context_update(sdl_context_t* ctx)
 {
     while(ctx->is_running)

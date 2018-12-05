@@ -15,3 +15,6 @@ context.o: src/context.c
 
 tetrimino.o: src/tetrimino.c
 	$(CC) $(CFLAGS) -c -o $@ $^
+
+clean:
+	rm -f *.o

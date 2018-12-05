@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     context = sdl_context_new("Tetris", 640, 480, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     context->post_draw = draw;
 
-    tetrimino_t* tetrimino = tetrimino_new(tetrimino_L, 0, context->width / 2 - 50, context->height / 2 - 50);
+    tetrimino_t* tetrimino = tetrimino_new(tetrimino_L, 2, context->width / 2 - 50, context->height / 2 - 50);
     current_tetrimino = tetrimino;
 
     sdl_context_update(context);
