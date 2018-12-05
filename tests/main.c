@@ -7,12 +7,20 @@
 tetrimino_t* current_tetrimino = NULL;
 sdl_context_t* context = NULL;
 
+int pressed = 0;
+
 static void draw(sdl_context_t* ctx)
 {
     draw_tetrimino(current_tetrimino, 255, 0, 0, 255);
 
     if(get_key(context, SDL_SCANCODE_W))
         current_tetrimino->pos_y -= 20;
+    if(get_key(context, SDL_SCANCODE_SPACE) && pressed){
+        current_tetrimino->offset++;
+        pressed = 0;
+    } else if(!get_key(context, SDL_SCANCODE_SPACE))
+        pressed = 1;
+
 }
 
 int main(int argc, char** argv)
