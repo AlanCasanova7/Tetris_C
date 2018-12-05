@@ -26,13 +26,13 @@ void draw_tetrimino(tetrimino_t* tetrimino, uint8_t r, uint8_t g, uint8_t b, uin
     SDL_Rect rect;
     rect.w = TETRIMINO_SIZE;
     rect.h = TETRIMINO_SIZE;
-
+    tetrimino->offset %= 4;
     for(unsigned i = tetrimino->offset * TETRIMINO_SEGMENT; i < (tetrimino->offset * TETRIMINO_SEGMENT) + TETRIMINO_SEGMENT; i++)
     {
         if(tetrimino->tetrimino_map[i] == 1)
         {
-            rect.x = (((i - (tetrimino->offset * 25)) % 5) * rect.w) + tetrimino->pos_x;
-            rect.y = (((i - (tetrimino->offset * 25)) / 5) * rect.h) + tetrimino->pos_y;
+            rect.x = (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) % 5) * rect.w) + tetrimino->pos_x;
+            rect.y = (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) / 5) * rect.h) + tetrimino->pos_y;
 
             SDL_SetRenderDrawColor(context->renderer, r, g, b, a);
             SDL_RenderFillRect(context->renderer, &rect);
