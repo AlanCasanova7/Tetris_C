@@ -1,4 +1,6 @@
 tetrimino.o
 main.o
 context.o
+main
+[Tt]etris.exe
 .vs/
