@@ -3,8 +3,6 @@
 
 extern sdl_context_t *context;
 
-char called;
-
 tetrimino_t *tetrimino_new(char *map, uint8_t offset, int pos_x, int pos_y)
 {
     tetrimino_t *tetrimino = malloc(sizeof(tetrimino_t));
@@ -71,6 +69,22 @@ void draw_map(char *map, color_t* color)
             SDL_SetRenderDrawColor(context->renderer, color[(int)map[i] -1].r, color[(int)map[i] -1].g, color[(int)map[i] -1].b, color[(int)map[i] -1].a);
             SDL_RenderFillRect(context->renderer, &rect);
             SDL_RenderDrawRect(context->renderer, &rect);
+        }
+    }
+}
+
+void add_tetrimino_to_map(char *map, tetrimino_t* tetrimino)
+{
+    for (int i = tetrimino->offset * TETRIMINO_SEGMENT; i < (tetrimino->offset * TETRIMINO_SEGMENT) + TETRIMINO_SEGMENT; i++)
+    {
+        if(tetrimino->tetrimino_map[i] != 0)
+        {
+            int x = tetrimino->pos_x + (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) % TETRIMINO_COLUMNS) * TETRIMINO_SIZE);
+            int y = tetrimino->pos_y + (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) / TETRIMINO_COLUMNS) * TETRIMINO_SIZE);
+            SDL_Log("[%d], [%d]", x, y);
+            int index = (y * MAP_COLUMNS + x) / 20;
+            SDL_Log("[%d], [%d]", index, tetrimino->tetrimino_map[i]);
+            map[index] = tetrimino->tetrimino_map[i];
         }
     }
 }
