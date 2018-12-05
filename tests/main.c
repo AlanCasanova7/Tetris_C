@@ -29,6 +29,7 @@ void respawn_tetrimino(){
     next_possible_pos = (tetrimino_t*)SDL_memcpy(next_possible_pos, current_tetrimino, sizeof(tetrimino_t));\
     if(get_key(context, key) && key_pressed_char){\
         next_possible_pos->variable_to_mod += value;\
+        next_possible_pos->offset %= 4;\
         key_pressed_char = 0;\
     for (int i = next_possible_pos->offset * TETRIMINO_SEGMENT; i < (next_possible_pos->offset * TETRIMINO_SEGMENT) + TETRIMINO_SEGMENT; i++){\
         if(next_possible_pos->tetrimino_map[i] != 0){\
@@ -62,7 +63,7 @@ void update()
         {
             if(next_possible_pos->tetrimino_map[i] != 0)
             {
-                int index = get_map_index(next_possible_pos->pos_x + ((i % TETRIMINO_COLUMNS) * TETRIMINO_SIZE), next_possible_pos->pos_y + ((i / TETRIMINO_COLUMNS) * TETRIMINO_SIZE), tilemap);
+                int index = get_map_index(next_possible_pos->pos_x + (((i - (next_possible_pos->offset * TETRIMINO_SEGMENT)) % TETRIMINO_COLUMNS) * TETRIMINO_SIZE), next_possible_pos->pos_y + (((i - (next_possible_pos->offset * TETRIMINO_SEGMENT)) / TETRIMINO_COLUMNS) * TETRIMINO_SIZE), tilemap);
                 if(index != 0){
                     if(index < 9){
                         add_tetrimino_to_map(tilemap, current_tetrimino);
