@@ -31,8 +31,9 @@ void draw_tetrimino(tetrimino_t *tetrimino, uint8_t r, uint8_t g, uint8_t b, uin
     rect.h = TETRIMINO_SIZE;
     tetrimino->offset %= TETRIMINO_MAX_ARRAY_ROT;
     
-    for (unsigned i = tetrimino->offset * TETRIMINO_SEGMENT; i < (tetrimino->offset * TETRIMINO_SEGMENT) + TETRIMINO_SEGMENT; i++)
+    for (int i = tetrimino->offset * TETRIMINO_SEGMENT; i < (tetrimino->offset * TETRIMINO_SEGMENT) + TETRIMINO_SEGMENT; i++)
     {
+        //SDL_Log("matrices points: [%d], [%d]", (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) % TETRIMINO_COLUMNS) * rect.w) + tetrimino->pos_x, (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) / TETRIMINO_COLUMNS) * rect.h) + tetrimino->pos_y);
         if (tetrimino->tetrimino_map[i] == 1)
         {
             rect.x = (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) % TETRIMINO_COLUMNS) * rect.w) + tetrimino->pos_x;
@@ -43,6 +44,12 @@ void draw_tetrimino(tetrimino_t *tetrimino, uint8_t r, uint8_t g, uint8_t b, uin
             SDL_RenderDrawRect(context->renderer, &rect);
         }
     }
+}
+
+int get_map_index(int x, int y, char* map)
+{
+    int map_index = y * (MAP_COLUMNS) + x;
+    return map[map_index / 20];
 }
 
 void draw_map(char *map)

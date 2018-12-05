@@ -73,6 +73,7 @@ void sdl_context_update(sdl_context_t* ctx)
 
         delta_time = (double)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency() );
         delta_time *= 0.001;
+        ctx->delta_time = delta_time;
 
         ctx->post_draw(ctx, delta_time);
 
