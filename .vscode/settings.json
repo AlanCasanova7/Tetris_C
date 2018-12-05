@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "tetrimino.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c"
+    }
+}
