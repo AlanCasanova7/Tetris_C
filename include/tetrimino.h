@@ -14,6 +14,10 @@
 #define TETRIMINO_COLUMNS           5
 #define TETRIMINO_MAX_ARRAY_ROT     4
 
+typedef struct color{
+    uint8_t r, g, b, a;
+}color_t;
+
 typedef struct tetrimino{
     char* tetrimino_map;
     int pos_x,pos_y;
@@ -21,6 +25,6 @@ typedef struct tetrimino{
 }tetrimino_t;
 
 tetrimino_t* tetrimino_new(char*, uint8_t, int, int);
-void draw_tetrimino(tetrimino_t*, uint8_t, uint8_t, uint8_t, uint8_t);
 int get_map_index(int, int, char*);
-void draw_map(char*);
+void draw_tetrimino(tetrimino_t*, color_t*);
+void draw_map(char*, color_t*);
