@@ -37,6 +37,8 @@ static void draw(sdl_context_t* ctx, double delta_time)
 
     draw_tetrimino(current_tetrimino, 255, 0, 0, 255);
 
+    draw_map(tilemap);
+
     DO_ON_BUTTON_DOWN(ctx, SDL_SCANCODE_SPACE, pressed_spacebar, offset, 1);
     DO_ON_BUTTON_DOWN(ctx, SDL_SCANCODE_DOWN, pressed_down, pos_y, 20);
     DO_ON_BUTTON_DOWN(ctx, SDL_SCANCODE_RIGHT, pressed_right, pos_x, 20);
@@ -45,10 +47,10 @@ static void draw(sdl_context_t* ctx, double delta_time)
 
 int main(int argc, char** argv)
 {
-    context = sdl_context_new("Tetris", 300, 450, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    context = sdl_context_new("Tetris", 300, 440, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     context->post_draw = draw;
 
-    tetrimino_t* tetrimino = tetrimino_new(tetrimino_L, 2, context->width / 2 - 50, context->height / 2 - 50);
+    tetrimino_t* tetrimino = tetrimino_new(tetrimino_L, 2, 20, 20);
     current_tetrimino = tetrimino;
 
     sdl_context_update(context);

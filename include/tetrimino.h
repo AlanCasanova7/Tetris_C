@@ -6,9 +6,13 @@
 
 #include <SDL.h>
 
-#define TETRIMINO_SIZE      20
-#define TETRIMINO_SEGMENT   25
-#define TETRIMINO_MAP_SIZE  100
+#define TETRIMINO_SIZE              20
+#define TETRIMINO_SEGMENT           25
+#define TETRIMINO_MAP_SIZE          100
+#define TETRIMINO_TILEMAP_LENGTH    330
+#define MAP_COLUMNS                 15
+#define TETRIMINO_COLUMNS           5
+#define TETRIMINO_MAX_ARRAY_ROT     4
 
 typedef struct tetrimino{
     char* tetrimino_map;
@@ -18,3 +22,4 @@ typedef struct tetrimino{
 
 tetrimino_t* tetrimino_new(char*, uint8_t, int, int);
 void draw_tetrimino(tetrimino_t*, uint8_t, uint8_t, uint8_t, uint8_t);
+void draw_map(char*);
