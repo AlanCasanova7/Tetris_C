@@ -3,6 +3,8 @@
 #include <tetrimino.h>
 #include <tetrimino_maps.h>
 #include <context.h>
+#include <string.h>
+#include <time.h>
 
 tetrimino_t* current_tetrimino = NULL;
 sdl_context_t* context = NULL;
@@ -16,13 +18,15 @@ char pressed_down = 0;
 
 float update_counter = 0;
 
+char** map_modes = NULL;
+
 #define MAX_STEP 20
 
 void respawn_tetrimino(){
     current_tetrimino->offset = 0;
-    current_tetrimino->pos_x = 0;
+    current_tetrimino->pos_x = context->width / 2 - 50;
     current_tetrimino->pos_y = 0;
-    current_tetrimino->tetrimino_map = tetrimino_I;
+    current_tetrimino->tetrimino_map = map_modes[rand() % 7];
 }
 
 #define DO_ON_BUTTON_DOWN(context, key, key_pressed_char, variable_to_mod, value)\
@@ -97,8 +101,19 @@ static void draw(sdl_context_t* ctx)
 
 int main(int argc, char** argv)
 {
+    srand((unsigned)time(NULL));
     context = sdl_context_new("Tetris", 300, 440, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     context->post_draw = draw;
+
+    map_modes = malloc(100 * 7);
+
+    map_modes[0] = tetrimino_T;
+    map_modes[1] = tetrimino_J;
+    map_modes[2] = tetrimino_Z;
+    map_modes[3] = tetrimino_O;
+    map_modes[4] = tetrimino_S;
+    map_modes[5] = tetrimino_L;
+    map_modes[6] = tetrimino_I;
 
     next_possible_pos = malloc(sizeof(tetrimino_t));
     memset(next_possible_pos, 0, sizeof(tetrimino_t));
