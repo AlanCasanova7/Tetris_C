@@ -18,6 +18,13 @@ float update_counter = 0;
 
 #define MAX_STEP 20
 
+void respawn_tetrimino(){
+    current_tetrimino->offset = 0;
+    current_tetrimino->pos_x = 0;
+    current_tetrimino->pos_y = 0;
+    current_tetrimino->tetrimino_map = tetrimino_I;
+}
+
 #define DO_ON_BUTTON_DOWN(context, key, key_pressed_char, variable_to_mod, value)\
     next_possible_pos = (tetrimino_t*)SDL_memcpy(next_possible_pos, current_tetrimino, sizeof(tetrimino_t));\
     if(get_key(context, key) && key_pressed_char){\
@@ -25,10 +32,14 @@ float update_counter = 0;
         key_pressed_char = 0;\
     for (int i = next_possible_pos->offset * TETRIMINO_SEGMENT; i < (next_possible_pos->offset * TETRIMINO_SEGMENT) + TETRIMINO_SEGMENT; i++){\
         if(next_possible_pos->tetrimino_map[i] != 0){\
-            int x = next_possible_pos->pos_x + ((i % TETRIMINO_COLUMNS) * TETRIMINO_SIZE);\
-            int y = next_possible_pos->pos_y + ((i / TETRIMINO_COLUMNS) * TETRIMINO_SIZE);\
+            int x = next_possible_pos->pos_x + (((i - (next_possible_pos->offset * TETRIMINO_SEGMENT)) % TETRIMINO_COLUMNS) * TETRIMINO_SIZE);\
+            int y = next_possible_pos->pos_y + (((i - (next_possible_pos->offset * TETRIMINO_SEGMENT)) / TETRIMINO_COLUMNS) * TETRIMINO_SIZE);\
             int index = get_map_index(x, y, tilemap);\
             if(index != 0){\
+                if(index < 9){\
+                    add_tetrimino_to_map(tilemap, current_tetrimino);\
+                    respawn_tetrimino();\
+                }\
                 return;\
             }\
             SDL_Log("x [%d] y [%d] index [%d]", x, y, index);\
@@ -36,6 +47,7 @@ float update_counter = 0;
     }\
     current_tetrimino->pos_y = next_possible_pos->pos_y;\
     current_tetrimino->pos_x = next_possible_pos->pos_x;\
+    current_tetrimino->offset = next_possible_pos->offset;\
     } else if(!get_key(context, key))\
         key_pressed_char = 1;
 
@@ -50,8 +62,14 @@ void update()
         {
             if(next_possible_pos->tetrimino_map[i] != 0)
             {
-                if(get_map_index(next_possible_pos->pos_x + ((i % TETRIMINO_COLUMNS) * TETRIMINO_SIZE), next_possible_pos->pos_y + ((i / TETRIMINO_COLUMNS) * TETRIMINO_SIZE), tilemap) != 0)
+                int index = get_map_index(next_possible_pos->pos_x + ((i % TETRIMINO_COLUMNS) * TETRIMINO_SIZE), next_possible_pos->pos_y + ((i / TETRIMINO_COLUMNS) * TETRIMINO_SIZE), tilemap);
+                if(index != 0){
+                    if(index < 9){
+                        add_tetrimino_to_map(tilemap, current_tetrimino);
+                        respawn_tetrimino();
+                    }
                     return;
+                }
             }
         }
         current_tetrimino->pos_y = next_possible_pos->pos_y;
