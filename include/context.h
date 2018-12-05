@@ -14,7 +14,8 @@ typedef struct sdl_context{
     int width,height;
     uint32_t flags;
     // char pressed;
-    void(*post_draw)(struct sdl_context*);
+    double delta_time;
+    void(*post_draw)(struct sdl_context*, double);
 }sdl_context_t;
 
 sdl_context_t* sdl_context_new(const char*, int, int, uint32_t);

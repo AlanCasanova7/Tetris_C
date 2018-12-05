@@ -54,9 +54,12 @@ uint8_t get_key(sdl_context_t* ctx, SDL_Scancode key)
 
 void sdl_context_update(sdl_context_t* ctx)
 {
+    Uint64 NOW = SDL_GetPerformanceCounter();
+    Uint64 LAST = 0;
+    double delta_time = 0;
+
     while(ctx->is_running)
     {
-        
         SDL_PumpEvents();
 
         SDL_SetRenderDrawColor(ctx->renderer, 0, 0, 0, 0);
@@ -65,7 +68,13 @@ void sdl_context_update(sdl_context_t* ctx)
         if(get_key(ctx, SDL_SCANCODE_ESCAPE))
             ctx->is_running = 0;
 
-        ctx->post_draw(ctx);
+        LAST = NOW;
+        NOW = SDL_GetPerformanceCounter();
+
+        delta_time = (double)((NOW - LAST)*1000 / (double)SDL_GetPerformanceFrequency() );
+        delta_time *= 0.001;
+
+        ctx->post_draw(ctx, delta_time);
 
         SDL_RenderPresent(ctx->renderer);
     }
