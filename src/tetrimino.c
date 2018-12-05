@@ -3,6 +3,8 @@
 
 extern sdl_context_t *context;
 
+#define MAX_LINE 13
+
 tetrimino_t *tetrimino_new(char *map, uint8_t offset, int pos_x, int pos_y)
 {
     tetrimino_t *tetrimino = malloc(sizeof(tetrimino_t));
@@ -43,6 +45,32 @@ void draw_tetrimino(tetrimino_t* tetrimino, color_t* color)
             color[(int)tetrimino->tetrimino_map[i] - 1].a);
             SDL_RenderFillRect(context->renderer, &rect);
             SDL_RenderDrawRect(context->renderer, &rect);
+        }
+    }
+}
+
+void check_map_line_filled(char* map)
+{
+    int line_num = 0;
+    int number_of_tiles_completed = 0;
+    for(int i = 0; i < TETRIMINO_TILEMAP_LENGTH; i++)
+    {
+        if(map[i] > 0 && map[i] < 7)
+        {
+            number_of_tiles_completed++;
+        }
+
+        if(number_of_tiles_completed == MAX_LINE)
+        {
+            number_of_tiles_completed = 0;
+            // destroy blocks
+            // map[i % 15 * 8]
+        }
+
+        if((i % MAP_COLUMNS) == 0)
+        {
+            number_of_tiles_completed = 0;
+            line_num++;
         }
     }
 }

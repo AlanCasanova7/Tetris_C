@@ -23,7 +23,7 @@ char** map_modes = NULL;
 #define MAX_STEP 20
 
 void respawn_tetrimino(){
-    current_tetrimino->offset = 0;
+    current_tetrimino->offset = rand() % 4;
     current_tetrimino->pos_x = context->width / 2 - 50;
     current_tetrimino->pos_y = 0;
     current_tetrimino->tetrimino_map = map_modes[rand() % 7];
@@ -47,7 +47,6 @@ void respawn_tetrimino(){
                 }\
                 return;\
             }\
-            SDL_Log("x [%d] y [%d] index [%d]", x, y, index);\
         }\
     }\
     current_tetrimino->pos_y = next_possible_pos->pos_y;\
@@ -84,14 +83,14 @@ void update()
     }
 }
 
-
-
 static void draw(sdl_context_t* ctx)
 {
     update();
 
     draw_tetrimino(current_tetrimino, colors);
     draw_map(tilemap, colors);
+
+    check_map_line_filled(tilemap);
 
     DO_ON_BUTTON_DOWN(ctx, SDL_SCANCODE_SPACE, pressed_spacebar, offset, 1);
     DO_ON_BUTTON_DOWN(ctx, SDL_SCANCODE_DOWN, pressed_down, pos_y, MAX_STEP);
@@ -102,6 +101,7 @@ static void draw(sdl_context_t* ctx)
 int main(int argc, char** argv)
 {
     srand((unsigned)time(NULL));
+
     context = sdl_context_new("Tetris", 300, 440, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     context->post_draw = draw;
 

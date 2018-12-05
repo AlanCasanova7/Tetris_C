@@ -28,4 +28,5 @@ tetrimino_t* tetrimino_new(char*, uint8_t, int, int);
 int get_map_index(int, int, char*);
 void draw_tetrimino(tetrimino_t*, color_t*);
 void draw_map(char*, color_t*);
+void check_map_line_filled(char*);
 void add_tetrimino_to_map(char*, tetrimino_t*);
