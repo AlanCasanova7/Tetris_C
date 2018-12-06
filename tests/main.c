@@ -29,6 +29,12 @@ int score = 5;
 #define MAX_STEP 20
 
 void respawn_tetrimino(){
+    if(current_tetrimino->pos_y < 0){
+        SDL_Quit();
+        context->is_running = 0;
+        return;
+    }
+
     current_tetrimino->offset = next_offset;
     current_tetrimino->pos_x = 80;
     current_tetrimino->pos_y = -20;
@@ -111,8 +117,8 @@ static void draw(sdl_context_t* ctx)
 int main(int argc, char** argv)
 {
     srand((unsigned)time(NULL));
+    context = sdl_context_new("Tetris", 440, 440, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    context = sdl_context_new("Tetris", 420, 440, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     context->post_draw = draw;
 
     map_modes = malloc(100 * 7);
