@@ -19,16 +19,20 @@ char pressed_down = 0;
 float update_counter = 0;
 
 char** map_modes = NULL;
+char* next_map = NULL;
+uint8_t next_offset = 0;
+
+char* tetrimino_UI = NULL;
 
 #define MAX_STEP 20
 
-
-
 void respawn_tetrimino(){
-    current_tetrimino->offset = rand() % 4;
-    current_tetrimino->pos_x = context->width / 2 - 50;
-    current_tetrimino->pos_y = 0;
-    current_tetrimino->tetrimino_map = map_modes[rand() % 7];
+    current_tetrimino->offset = next_offset;
+    current_tetrimino->pos_x = 80;
+    current_tetrimino->pos_y = -20;
+    current_tetrimino->tetrimino_map = next_map;
+    next_map = map_modes[rand() % 7];
+    tetrimino_UI = next_map;
 }
 
 #define DO_ON_BUTTON_DOWN(context, key, key_pressed_char, variable_to_mod, value)\
@@ -92,6 +96,8 @@ static void draw(sdl_context_t* ctx)
     draw_tetrimino(current_tetrimino, colors);
     draw_map(tilemap, colors);
 
+    draw_tetrimino_on_ui(tetrimino_UI, colors, ctx->width - 120, ctx->height - 120);
+
     check_map_line_filled(tilemap);
 
     DO_ON_BUTTON_DOWN(ctx, SDL_SCANCODE_SPACE, pressed_spacebar, offset, 1);
@@ -104,7 +110,7 @@ int main(int argc, char** argv)
 {
     srand((unsigned)time(NULL));
 
-    context = sdl_context_new("Tetris", 300, 440, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    context = sdl_context_new("Tetris", 420, 440, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     context->post_draw = draw;
 
     map_modes = malloc(100 * 7);
@@ -120,8 +126,12 @@ int main(int argc, char** argv)
     next_possible_pos = malloc(sizeof(tetrimino_t));
     memset(next_possible_pos, 0, sizeof(tetrimino_t));
 
-    tetrimino_t* tetrimino = tetrimino_new(tetrimino_L, 0, 20, 20);
+    tetrimino_t* tetrimino = tetrimino_new(map_modes[rand() % 7], 0, 80, -20);
     current_tetrimino = tetrimino;
+
+    //calculate next random map and copy it onto UI
+    next_map = map_modes[rand() % 7];
+    tetrimino_UI = next_map;
 
     colors = malloc(sizeof(color_t)*9);
     colors[0].r = 255;  colors[0].g = 0;    colors[0].b = 0;    colors[0].a = 255;
@@ -132,7 +142,6 @@ int main(int argc, char** argv)
     colors[5].r = 0;    colors[5].g = 0;    colors[5].b = 255;  colors[5].a = 255;
     colors[6].r = 255;  colors[6].g = 0;    colors[6].b = 255;  colors[6].a = 255;
     colors[7].r = 255;  colors[7].g = 255;  colors[7].b = 255;  colors[7].a = 255;
-
     //left side wall
     colors[8].r = 255;  colors[8].g = 255;  colors[8].b = 255;  colors[8].a = 255;
 
