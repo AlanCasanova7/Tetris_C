@@ -24,6 +24,8 @@ uint8_t next_offset = 0;
 
 char* tetrimino_UI = NULL;
 
+int score = 5;
+
 #define MAX_STEP 20
 
 void respawn_tetrimino(){
@@ -64,7 +66,7 @@ void respawn_tetrimino(){
 void update()
 {
     next_possible_pos = (tetrimino_t*)SDL_memcpy(next_possible_pos, current_tetrimino, sizeof(tetrimino_t));
-    update_counter += context->delta_time;
+    update_counter += context->delta_time * (score / 5);
     if(update_counter >= 1)
     {
         next_possible_pos->pos_y += MAX_STEP;
