@@ -22,12 +22,12 @@ char** map_modes = NULL;
 
 #define MAX_STEP 20
 
-
+int score = 5;
 
 void respawn_tetrimino(){
     current_tetrimino->offset = rand() % 4;
-    current_tetrimino->pos_x = context->width / 2 - 50;
-    current_tetrimino->pos_y = 0;
+    current_tetrimino->pos_x = 80;
+    current_tetrimino->pos_y = -20;
     current_tetrimino->tetrimino_map = map_modes[rand() % 7];
 }
 
@@ -59,10 +59,13 @@ void respawn_tetrimino(){
 
 void update()
 {
+    SDL_Log("%d", score);
+
     next_possible_pos = (tetrimino_t*)SDL_memcpy(next_possible_pos, current_tetrimino, sizeof(tetrimino_t));
-    update_counter += context->delta_time;
+    update_counter += context->delta_time * (score / 5);
     if(update_counter >= 1)
     {
+movedown:
         next_possible_pos->pos_y += MAX_STEP;
         for (int i = next_possible_pos->offset * TETRIMINO_SEGMENT; i < (next_possible_pos->offset * TETRIMINO_SEGMENT) + TETRIMINO_SEGMENT; i++)
         {
@@ -83,6 +86,13 @@ void update()
 
         update_counter = 0;
     }
+    if(get_key(context, SDL_SCANCODE_DOWN) && pressed_down){
+        pressed_down = 0;
+        goto movedown;
+
+    }   else if(!get_key(context, SDL_SCANCODE_DOWN))
+    pressed_down = 1;
+
 }
 
 static void draw(sdl_context_t* ctx)
@@ -104,7 +114,7 @@ int main(int argc, char** argv)
 {
     srand((unsigned)time(NULL));
 
-    context = sdl_context_new("Tetris", 300, 440, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    context = sdl_context_new("Tetris", 440, 440, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     context->post_draw = draw;
 
     map_modes = malloc(100 * 7);
@@ -120,7 +130,7 @@ int main(int argc, char** argv)
     next_possible_pos = malloc(sizeof(tetrimino_t));
     memset(next_possible_pos, 0, sizeof(tetrimino_t));
 
-    tetrimino_t* tetrimino = tetrimino_new(tetrimino_L, 0, 20, 20);
+    tetrimino_t* tetrimino = tetrimino_new(tetrimino_L, 0, 80, -20);
     current_tetrimino = tetrimino;
 
     colors = malloc(sizeof(color_t)*9);

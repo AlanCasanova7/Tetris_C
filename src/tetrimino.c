@@ -2,6 +2,7 @@
 #include <context.h>
 
 extern sdl_context_t *context;
+extern int score;
 
 #define MAX_LINE 13
 
@@ -50,6 +51,7 @@ void draw_tetrimino(tetrimino_t* tetrimino, color_t* color)
 }
 
 void destroyblocks(int line_num, char* map){
+    score+=1;
     int start = (line_num - 1) * MAP_COLUMNS + 1;
     for(int i = start; i <= start + MAP_COLUMNS - 1; i++){
         int index = i;
