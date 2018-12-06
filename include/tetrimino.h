@@ -30,3 +30,4 @@ void draw_tetrimino(tetrimino_t*, color_t*);
 void draw_map(char*, color_t*);
 void check_map_line_filled(char*);
 void add_tetrimino_to_map(char*, tetrimino_t*);
+void draw_tetrimino_on_ui(char* map, color_t* color, int px, int py);

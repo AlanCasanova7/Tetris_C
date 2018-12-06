@@ -61,9 +61,6 @@ void destroyblocks(int line_num, char* map){
             index = index_up;
             index_up -= 15;
         }
-        // if(map[i - MAP_COLUMNS] != 0 && map[i - MAP_COLUMNS] < 8){
-        //     map[i - MAP_COLUMNS] = 0;
-        // }
     }
 }
 
@@ -82,7 +79,6 @@ void check_map_line_filled(char* map)
         {
             number_of_tiles_completed = 0;
             destroyblocks(line_num, map);
-            // map[i % 15 * 8]
         }
 
         if((i % MAP_COLUMNS) == 0)
@@ -127,10 +123,30 @@ void add_tetrimino_to_map(char *map, tetrimino_t* tetrimino)
         {
             int x = tetrimino->pos_x + (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) % TETRIMINO_COLUMNS) * TETRIMINO_SIZE);
             int y = tetrimino->pos_y + (((i - (tetrimino->offset * TETRIMINO_SEGMENT)) / TETRIMINO_COLUMNS) * TETRIMINO_SIZE);
-            SDL_Log("[%d], [%d]", x, y);
             int index = (y * MAP_COLUMNS + x) / 20;
-            SDL_Log("[%d], [%d]", index, tetrimino->tetrimino_map[i]);
             map[index] = tetrimino->tetrimino_map[i];
+        }
+    }
+}
+
+void draw_tetrimino_on_ui(char* map, color_t* color, int px, int py)
+{
+    SDL_Rect rect;
+    rect.w = TETRIMINO_SIZE;
+    rect.h = TETRIMINO_SIZE;
+
+    for(int i = 0; i < TETRIMINO_SEGMENT; i++)
+    {
+        if(map[i] != 0)
+        {
+            rect.x = ((i % TETRIMINO_COLUMNS) * TETRIMINO_SIZE) + px;
+            rect.y = ((i / TETRIMINO_COLUMNS) * TETRIMINO_SIZE) + py;
+            SDL_SetRenderDrawColor(context->renderer, 
+            color[map[i] - 1].r,
+            color[map[i] - 1].g,
+            color[map[i] - 1].b,
+            color[map[i] - 1].a);
+            SDL_RenderDrawRect(context->renderer, &rect);
         }
     }
 }
