@@ -1,6 +1,6 @@
 CC = clang
-CFLAGS = -Wall -Werror -O3 -I SDL/include -I include -Wno-pragma-pack
-LDFLAGS = -lSDL2 -L SDL/lib/x64
+CFLAGS = -Wall -Werror -O3 -I SDL/include -I SDL_ttf/include -I include -Wno-pragma-pack
+LDFLAGS = -lSDL2 -L SDL/lib/x64 -lSDL2_ttf -L SDL_ttf/lib/x64
 
 all: Tetris.exe
 

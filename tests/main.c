@@ -1,10 +1,10 @@
 #define SDL_MAIN_HANDLED
-
 #include <tetrimino.h>
 #include <tetrimino_maps.h>
 #include <context.h>
 #include <string.h>
 #include <time.h>
+//#include <text.h>
 
 tetrimino_t* current_tetrimino = NULL;
 sdl_context_t* context = NULL;
@@ -71,6 +71,8 @@ void respawn_tetrimino(){
 
 void update()
 {
+    draw_text_on_screen(context, concat("SCORE: ", score), 320, 40, 1, 255, 0, 0);
+
     next_possible_pos = (tetrimino_t*)SDL_memcpy(next_possible_pos, current_tetrimino, sizeof(tetrimino_t));
     update_counter += context->delta_time * (score / 5);
     if(update_counter >= 1)
